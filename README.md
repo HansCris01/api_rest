@@ -7,6 +7,9 @@ password:      --> No hay contraseña
 
 Pero si va a desplegarlo al Servidor para produccion debe cambiar las credenciales en el archivo .env
 
+0.- Descargar el VENDOR en este LINK: 
+
+https://drive.google.com/drive/folders/1bU2weslMfZHwIJLiJ83VEIpJFUPv0YB3?usp=sharing
 
 1.- Migrar la base de datos y tablas con el comando:
 
