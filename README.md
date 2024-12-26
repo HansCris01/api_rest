@@ -1,66 +1,351 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+------Despliegue del Servicio WEB -----
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Recuerde que la credenciales de su Gestor de base de datos debe tener esto, si esta en localhost:
 
-## About Laravel
+usuario: root
+password:      --> No hay contraseña
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pero si va a desplegarlo al Servidor para produccion debe cambiar las credenciales en el archivo .env
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1.- Migrar la base de datos y tablas con el comando:
 
-## Learning Laravel
+php artisan migrate
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+con eso se va crear la base de datos automaticamente con la tabla pero la creacion de base de datos para migracion solo funciona en localhost si lo vas hacer en CPANEL
+vas a necesitar crear la base de datos de manera manual desde su gestor Mysql o PhpMyAdmin
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Nota: No es necesario cambiar el nombre de base de datos del archivo .env
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2.- tambien es importante borrar la cache en el framework al momento de desplegar al servidor de produccion:
 
-## Laravel Sponsors
+php artisan config:clear
+php artisan cache:clear
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Credenciales por defecto, para proteger el API rest.
 
-### Premium Partners
+Usuario: root@outlook.es
+Password: 123
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+3.- Si vas a poner a producción modificar el APP_DEBUG cambiandolo a false
 
-## Contributing
+   APP_DEBUG=true  --> cambiarlo por false :  APP_DEBUG=false
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4.- Usar postman para localhost o en su Servidor WEB:
 
-## Code of Conduct
+  Nota considerar esto: http://localhost/nombre_carpeta/api_rest/public/api/v1/nombre_de_la_ruta
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+  primero usar la ruta login y colocar las credenciales para obtener el token, recuerde ir a body raw --> Json
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+  {
+  "email": "root@outlook.es",
+  "password": "123"
+  }
 
-## License
+  segundo usar las rutas students que desee usar, pero considerar ingrear el token en la opcion de Autorizathion y seleccionar Bearer Token 
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+  tercero cuando termine hacer su consulta debe cerrar la sesion con la ruta: logout ingresando el codigo del token para poder finalizar la sesion
+
+5 Usar postman probando directamente de mi Servidor WEB de la Nube con mi dominio: https://evaluacion.desarrolladorhansluyo.com
+
+a) Primero Logear para obtener el token:
+
+  Seleccionar metodo: POST 
+
+  Link: https://evaluacion.desarrolladorhansluyo.com/api/v1/iniciaSesion
+
+  Ir en la opción body ahora va a ver muchas opciones hay que elegir raw y vas a ka última opción a la derecha que es un selector que dice text cambialo por JSON 
+  y coloca este codigo:
+
+  {
+  "email": "root@outlook.es",
+  "password": "123"
+  }
+
+  hacer click en el boton Enviar y debe darte esto como ejemplo:
+
+  {
+    "token": "8|qJWVjUwrUJhGELCL8yprKqjlbHsL1fHullcJT5aub3faacc2",     --> Este es el Token de Seguridad que te va dar, recuerda que el Token cambia cada vez que das el boton Enviar.
+    "user": {
+        "id": 1,
+        "name": "root",
+        "email": "root@outlook.es",
+        "email_verified_at": null,
+        "created_at": "2024-09-23T06:00:00.000000Z",
+        "updated_at": "2024-12-25T21:36:03.000000Z"
+    }
+}
+
+b) Segundo Consultar la ruta students para listar los datos:
+
+Seleccionar metodo: GET
+
+Link: https://evaluacion.desarrolladorhansluyo.com/api/v1/students
+
+Ir a la opción Authorization, vamos al selector Auth Type para seleccionar Bearer Token con eso va aparecer una caja de texto llamada Token para pegar el token que copiastes
+
+Hacer click en el boton: Enviar
+
+y te dara los datos en JSON:
+
+{
+    "students": [
+        {
+            "id": 2,
+            "first_name": "Jose",
+            "last_name": "Perez",
+            "enrollment_date": "2024-12-26",
+            "status": 1
+        },
+        {
+            "id": 1,
+            "first_name": "Maria",
+            "last_name": "De La Cruz",
+            "enrollment_date": "2024-12-25",
+            "status": 2
+        }
+    ]
+}
+
+c) Tercero buscar datos de los students por ID:
+
+Seleccionar metodo: GET
+
+link: https://evaluacion.desarrolladorhansluyo.com/api/v1/students/2  --> El numero 2 es el ID a buscar puede cambiar a otro ID si desea
+
+Ir a la opción Authorization, vamos al selector Auth Type para seleccionar Bearer Token con eso va aparecer una caja de texto llamada Token para pegar el token que copiastes
+
+Hacer click en el boton: Enviar
+
+y te dara los datos detallado de los Students en JSON:
+
+{
+    "students": [
+        {
+            "id": 2,
+            "first_name": "Jose",
+            "last_name": "Perez",
+            "email": "jose@example.com",
+            "phone": "7952610",
+            "birth_date": "1996-12-11",
+            "enrollment_date": "2024-12-26",
+            "status": 1
+        }
+    ]
+}
+
+b) Cuarto Agregar students 
+
+Seleccionar metodo: POST
+
+link: https://evaluacion.desarrolladorhansluyo.com/api/v1/students
+
+Ir a la opción Authorization, vamos al selector Auth Type para seleccionar Bearer Token con eso va aparecer una caja de texto llamada Token para pegar el token que copiastes
+
+Ir en la opción body ahora va a ver muchas opciones hay que elegir raw y vas a ka última opción a la derecha que es un selector que dice text cambialo por JSON 
+  y coloca este codigo:
+
+{
+    "first_name": "Nail",  --> cambia a otro nombre porque ya existe
+    "last_name": "Ortega", --> cambia de apellido porque ya existe 
+    "email": "nail2@example.com", --> el email es Unico y debes poner otro email porque ya esta registrado (Campo Obligatorio)
+    "phone": "7252654", --> el phone es Unico y debes poner otro phone porque ya esta registrado (Campo Obligatorio)
+    "birth_date": "1992-12-11" --> Aqui tiene validacion para no permitir fecha futura (Campo Obligatorio)
+}
+   Ahora el campo: enrollment_date  --> Es la fecha de inscripcion y como es fecha de incripcion por logica tiene que ser con la fecha del servidor al momento de registrar,
+                                       por ese motivo no se ingresa enrollment_date. 
+
+   Ahora el campo: status  --> No se ingresa ya que internamente se va insertar en automatico el número 1 como Activado, ya que numero es mejor para tener mas velocidad.
+    
+  Nota: Si la Fecha de nacimiento es futura le dara este mensaje para validar: 
+
+  {
+    "message": {
+        "birth_date": [
+            "No se permite una fecha futura en el campo birth_date"
+        ]
+    }
+
+  hacer click en el boton Enviar y debe darte esto:
+
+  {
+    "message": "Estudiante creado correctamente"
+}
+
+c) Quinto Actualizar datos students
+
+Seleccionar metodo: PUT
+
+ link: https://evaluacion.desarrolladorhansluyo.com/api/v1/students/1 --> e numero 1 es el ID que voy a modificar, si quiere modificar otro registro recuerde cambiar el ID
+
+ Ir a la opción Authorization, vamos al selector Auth Type para seleccionar Bearer Token con eso va aparecer una caja de texto llamada Token para pegar el token que copiastes
+
+ Ir en la opción body ahora va a ver muchas opciones hay que elegir raw y vas a ka última opción a la derecha que es un selector que dice text cambialo por JSON 
+  y coloca este codigo:
+
+  {
+   "first_name": "Maria",     --> modifique el nombre que desea
+   "last_name": "De La Cruz", --> modifique el apellido que desea
+   "email": "maria@outlook.es", --> modifique el email que desea  --> Tiene validación de email como unico
+   "phone": "97120954", --> --> modifique el phone que desea  --> Tiene validación de phone como unico
+   "birth_date": "1994-02-14",  --> --> modifique la fecha de nacimiento que desea --> Tiene validacion para no aceptar fechas futuras
+   "status": 2  --> Estado 2 para Desactivar y Estado 1 es para activar
+}
+
+Si hay problema por fecha futura le dara este mensaje al dar el boton Enviar:
+
+{
+    "message": {
+        "birth_date": [
+            "No se permite una fecha futura en el campo birth_date"
+        ]
+    }
+
+Si todo esta bien te dara este mensaje:
+
+{
+    "message": "Estudiante modificado correctamente"
+}
+
+
+D) Cerrar sesion del Token cuando termines de hacer consultas:
+
+Seleccionar metodo: POST
+
+link: https://evaluacion.desarrolladorhansluyo.com/api/v1/logout
+
+Ir a la opción Authorization, vamos al selector Auth Type para seleccionar Bearer Token con eso va aparecer una caja de texto llamada Token para pegar el token que copiastes
+
+y te dara este mensaje:
+
+{
+    "message": "Sesión cerrada en todos los dispositivos"
+}
+
+  ----------------------------------------------------------------------------------------------------------------
+  ------------------------Documentacion de configuración para Desarrollo el API Rest-----------------------------------------
+  ----------------------------------------------------------------------------------------------------------------
+
+  _ Primer paso crear el proyecto Laravel 11, con este comando:
+
+  composer create-project laravel/laravel:^11.0 api_rest
+
+  _ Segundo paso creacion del archivo para la migracion de base de datos 
+
+  php artisan make:migration bd_prueba_tecnica
+
+  _ Tercer paso crear el archivo para la migracion de las tablas: 
+
+   php artisan make:controller Api/V1/StudentController --api --model=student
+
+   php artisan make:controller Api/V1/UserController --api --model=User
+
+ _ Al terminar de programar los archivos de migracion, ejecutar este comando:
+
+    usar el comando: php artisan migrate
+    en la consola te dira yes o no
+    escribir yes  
+    dar enter
+
+ _ Configuracion de las fechas y zona horaria para America/lima 
+ 
+   Configurar la fecha de zona horaria y del proyecto
+ para el registro de fecha:
+
+
+    ir config/app.php
+
+    buscar a: 
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
+
+    cambiarlo por:
+
+    'timezone' => env('APP_TIMEZONE', 'America/Lima'),
+
+    ir a: env.
+
+    APP_TIMEZONE=UTC
+
+    pasar a esto:
+
+    APP_TIMEZONE=America/Lima
+
+
+
+_Se va configurar el nombre de la aplicacion
+
+    config/app.php 
+
+    cambiar esto:
+
+    'name' => env('APP_NAME', 'laravel'),
+
+    lo modificamos asi:
+
+    'name' => env('APP_NAME', 'api_rest'),
+
+    config/cache.php
+
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), 
+
+    '_').'_cache_'),
+
+    cambiar a esto:
+
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'api_rest'), 
+
+    '_').'_cache_'),
+
+    config/database.php
+
+    'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), 
+
+    '_').'_database_'),
+
+    cambiar a esto:
+
+    'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'api_rest'), 
+
+    '_').'_database_'),
+
+_ Se va crear el modelo:
+
+   comando: 
+   php artisan make:model student -m
+   
+   El modelo User ya biene por defecto
+
+ _ Crear el archivo api.php dentro de la carpeta routes/
+
+   comando: php artisan install:api
+
+   En caso no llegue a crear va tener que crear el archivo manualmente y programar.
+
+    Recuerde programar las rutas
+
+   _ comando para crear el archivo en el provider:
+  
+     php artisan make:provider RouteServiceProvider 
+
+     Recuerda programar el archivo 
+
+
+   _  Agregar seguridad a la API con sanctum para darle seguridad de autentificacion (Se tomo esta decisión para proteger el API rest de ataque cybernetico)
+
+     comando de instalacion: 
+
+     comando:  composer require laravel/sanctum
+
+    ejecutar el siguiente comando: 
+
+    composer show laravel/sanctum
+
+    ejecutar el otro comando: 
+
+    php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+    vamos a modificar el modelo usuario para agregar la clase: HasApiTokens de Sanctum.
+
+   
