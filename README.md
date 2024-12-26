@@ -310,6 +310,22 @@ _Se va configurar el nombre de la aplicacion
 
     '_').'_database_'),
 
+   config/session.php
+
+    'cookie' => env(
+        'SESSION_COOKIE',
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+    ),
+
+    cambiar a esto:
+
+     'cookie' => env(
+        'SESSION_COOKIE',
+        Str::slug(env('APP_NAME', 'api_rest'), '_').'_session'
+    ),
+
+
+
 _ Se va crear el modelo:
 
    comando: 
