@@ -58,7 +58,7 @@ class StudentController extends Controller
                 return response()->json(['message' => $e->errors()], 422); // 422 es un error de validación
             } catch (\Exception $e) {
                 // Para otros errores que no sean de validación
-                return response()->json(['message' => '¡Problema en el controlador store, en el metodo store!'], 500);
+                return response()->json(['message' => '¡Ya existe ese correo o teléfono!'], 500);
             }
         }
     
@@ -107,7 +107,7 @@ class StudentController extends Controller
             return response()->json(['message' => $e->errors()], 422); // 422 es un error de validación
         } catch (\Exception $e) {
             // Para otros errores que no sean de validación
-            return response()->json(['message' => '¡Problema en el controlador student, del metodo update!'], 500);
+            return response()->json(['message' => '¡Ya existe ese correo o teléfono!'], 500);
         }
     }
 
