@@ -1,6 +1,7 @@
 Para ejecutar la aplicacion WEB REACT tiene que descargar la app_web que esta en el drive :
 link: https://drive.google.com/drive/folders/1C4daWnFjuyTSjdQP_szN0EcMC7KJ3I-r?usp=sharing
 
+El archivo se llama: front-end.zip
 debe ejecutar el comando: npm start 
 
 No tiene que modificar los endpoints o ApisRest ya que estan en diectamente en la nube
